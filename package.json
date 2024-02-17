@@ -24,9 +24,9 @@
     "vite": "^5.1.0"
   },
   "exports": {
-    "setThemeFromHexColor": "./src/setThemeFromHexColor.ts",
-    "theme/light": "./theme/light.css",
-    "theme/dark": "./theme/dark.css"
+    ".": "./src/setThemeFromHexColor.ts",
+    "./theme/light": "./theme/light.css",
+    "./theme/dark": "./theme/dark.css"
   },
   "files": [
     "src/setThemeFromHexColor.ts",

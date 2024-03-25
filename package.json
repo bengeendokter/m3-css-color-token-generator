@@ -1,9 +1,8 @@
 {
   "name": "m3-css-color-token-generator",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Material Design 3 CSS custom properties color token generator.",
-  "type": "module",
   "main": "dist/setThemeFromHexColor.js",
   "module": "dist/setThemeFromHexColor.mjs",
   "types": "dist/setThemeFromHexColor.d.ts",
@@ -30,7 +29,6 @@
     "vite": "^5.1.0"
   },
   "exports": {
-    ".": "./src/setThemeFromHexColor.js",
     "./theme/light": "./theme/light.css",
     "./theme/dark": "./theme/dark.css"
   },

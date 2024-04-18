@@ -80,6 +80,9 @@ export function setDarkTheme()
 
   // add "dark" class to the root element
   document.documentElement.classList.add('dark');
+
+  // update the theme color meta tag
+  setMetaThemeColor();
 }
 
 /**
@@ -101,6 +104,9 @@ export function setLightTheme()
 
   // add "light" class to the root element
   document.documentElement.classList.add('light');
+  
+  // update the theme color meta tag
+  setMetaThemeColor();
 }
 
 /**

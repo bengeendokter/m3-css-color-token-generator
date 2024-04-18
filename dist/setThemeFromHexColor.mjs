@@ -39,6 +39,7 @@ function setMetaThemeColor(color) {
 function setDarkTheme() {
   document.documentElement.classList.remove("light");
   document.documentElement.classList.add("dark");
+  setMetaThemeColor();
 }
 function setDarkThemePreference() {
   localStorage.setItem("colorScheme", "dark");
@@ -46,6 +47,7 @@ function setDarkThemePreference() {
 function setLightTheme() {
   document.documentElement.classList.remove("dark");
   document.documentElement.classList.add("light");
+  setMetaThemeColor();
 }
 function setLightThemePreference() {
   localStorage.setItem("colorScheme", "light");

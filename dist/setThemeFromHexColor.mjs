@@ -21,6 +21,22 @@ function setThemeFromHexColor(hexColor) {
     });
   });
 }
+function setMetaThemeColor(color) {
+  if (!color) {
+    const surfaceColor = getComputedStyle(document.documentElement).getPropertyValue("--md-sys-color-surface");
+    color = surfaceColor;
+  }
+  const metaTag = document.querySelector('meta[name="theme-color"]');
+  if (!metaTag) {
+    const newMetaTag = document.createElement("meta");
+    newMetaTag.setAttribute("name", "theme-color");
+    newMetaTag.setAttribute("content", color);
+    document.head.appendChild(newMetaTag);
+    return;
+  }
+  metaTag.setAttribute("content", color);
+}
 export {
+  setMetaThemeColor,
   setThemeFromHexColor
 };

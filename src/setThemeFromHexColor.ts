@@ -39,3 +39,33 @@ export function setThemeFromHexColor(hexColor: string)
     });
   });
 }
+
+/**
+ * Sets the theme color meta tag to the given hex color.
+ *
+ * @param {string} color - The color value to set the theme color to.
+ */
+export function setMetaThemeColor(color?: string)
+{
+  // If no hex color is provided, set hexColor to the value of the --md-sys-color-surface CSS custom property
+  if (!color)
+  {
+    const surfaceColor = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-surface');
+    color = surfaceColor;
+  }
+
+  // Set the theme color meta tag to the given hex color
+  const metaTag = document.querySelector('meta[name="theme-color"]');
+
+  // If meta tag does not exist, create a new one
+  if (!metaTag)
+  {
+    const newMetaTag = document.createElement('meta');
+    newMetaTag.setAttribute('name', 'theme-color');
+    newMetaTag.setAttribute('content', color);
+    document.head.appendChild(newMetaTag);
+    return;
+  }
+
+  metaTag.setAttribute('content', color);
+}

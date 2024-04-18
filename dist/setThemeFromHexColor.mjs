@@ -36,7 +36,59 @@ function setMetaThemeColor(color) {
   }
   metaTag.setAttribute("content", color);
 }
+function setDarkTheme() {
+  document.documentElement.classList.remove("light");
+  document.documentElement.classList.add("dark");
+}
+function setDarkThemePreference() {
+  localStorage.setItem("colorScheme", "dark");
+}
+function setLightTheme() {
+  document.documentElement.classList.remove("dark");
+  document.documentElement.classList.add("light");
+}
+function setLightThemePreference() {
+  localStorage.setItem("colorScheme", "light");
+}
+function setFollowSystemPreference() {
+  localStorage.setItem("colorScheme", "os");
+}
+function setInitialTheme() {
+  const colorScheme = localStorage.getItem("colorScheme");
+  if (colorScheme === "dark") {
+    setDarkTheme();
+    return;
+  }
+  if (colorScheme === "light") {
+    setLightTheme();
+    return;
+  }
+  window.matchMedia("(prefers-color-scheme: dark)").matches ? setDarkTheme() : setLightTheme();
+}
+function enableSystemColorSchemePreferenceListener() {
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+    if (["light", "dark"].includes(localStorage.getItem("colorScheme") ?? "os")) {
+      return;
+    }
+    const newColorScheme = event.matches ? "dark" : "light";
+    if (newColorScheme === "dark") {
+      setDarkTheme();
+      return;
+    }
+    if (newColorScheme === "light") {
+      setLightTheme();
+      return;
+    }
+  });
+}
 export {
+  enableSystemColorSchemePreferenceListener,
+  setDarkTheme,
+  setDarkThemePreference,
+  setFollowSystemPreference,
+  setInitialTheme,
+  setLightTheme,
+  setLightThemePreference,
   setMetaThemeColor,
   setThemeFromHexColor
 };

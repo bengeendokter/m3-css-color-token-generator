@@ -43,15 +43,15 @@ export function setThemeFromHexColor(hexColor: string)
 /**
  * Sets the theme color meta tag to the given hex color.
  *
- * @param {string} color - The color value to set the theme color to. Defaults to the value of the --md-sys-color-surface CSS custom property when not provided.
+ * @param {string} color - The color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
  */
 export function setMetaThemeColor(color?: string)
 {
-  // If no hex color is provided, set hexColor to the value of the --md-sys-color-surface CSS custom property
+  // If no hex color is provided, set hexColor to the value of the --md-sys-color-surface-container CSS custom property
   if(!color)
   {
-    const surfaceColor = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-surface');
-    color = surfaceColor;
+    const surfaceContainerColor = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-surface-container');
+    color = surfaceContainerColor;
   }
 
   // Set the theme color meta tag to the given hex color
@@ -104,7 +104,7 @@ export function setLightTheme()
 
   // add "light" class to the root element
   document.documentElement.classList.add('light');
-  
+
   // update the theme color meta tag
   setMetaThemeColor();
 }

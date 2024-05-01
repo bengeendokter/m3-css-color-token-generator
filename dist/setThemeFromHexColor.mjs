@@ -23,8 +23,8 @@ function setThemeFromHexColor(hexColor) {
 }
 function setMetaThemeColor(color) {
   if (!color) {
-    const surfaceColor = getComputedStyle(document.documentElement).getPropertyValue("--md-sys-color-surface");
-    color = surfaceColor;
+    const surfaceContainerColor = getComputedStyle(document.documentElement).getPropertyValue("--md-sys-color-surface-container");
+    color = surfaceContainerColor;
   }
   const metaTag = document.querySelector('meta[name="theme-color"]');
   if (!metaTag) {

@@ -1,18 +1,12 @@
 /**
- * Generates a theme from a given hexadecimal color value.
- * The function converts the hex color to an ARGB color, creates a CorePalette from it,
- * and then sets CSS custom properties for various tones of several palettes.
- *
- * @param {string} hexColor - The hexadecimal color value to create the theme from.
- */
-declare function setThemeFromHexColor(hexColor: string): void;
-/**
+ * @deprecated default value of --md-sys-color-surface-container does not work, needs to probably be a hex color without css custom properties, research how it was able to work before
  * Sets the theme color meta tag to the given hex color.
  *
  * @param {string} color - The color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
  */
 declare function setMetaThemeColor(color?: string): void;
 /**
+ * @deprecated this function doesn't work with contrast themes
  * Sets the color scheme to a dark theme.
  */
 declare function setDarkTheme(): void;
@@ -21,6 +15,7 @@ declare function setDarkTheme(): void;
  */
 declare function setDarkThemePreference(): void;
 /**
+ * @deprecated this function doesn't work with contrast themes
  * Sets the color scheme to a light theme.
  */
 declare function setLightTheme(): void;
@@ -41,4 +36,4 @@ declare function setInitialTheme(): void;
  */
 declare function enableSystemColorSchemePreferenceListener(): void;
 
-export { enableSystemColorSchemePreferenceListener, setDarkTheme, setDarkThemePreference, setFollowSystemPreference, setInitialTheme, setLightTheme, setLightThemePreference, setMetaThemeColor, setThemeFromHexColor };
+export { enableSystemColorSchemePreferenceListener, setDarkTheme, setDarkThemePreference, setFollowSystemPreference, setInitialTheme, setLightTheme, setLightThemePreference, setMetaThemeColor };

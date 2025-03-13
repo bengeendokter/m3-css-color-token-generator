@@ -29,8 +29,13 @@
   },
   "exports": {
     ".": "./dist/setThemeFromHexColor.mjs",
+    "./theme/palette": "./theme/palette.css",
     "./theme/light": "./theme/light.css",
-    "./theme/dark": "./theme/dark.css"
+    "./theme/dark": "./theme/dark.css",
+    "./theme/light-mc": "./theme/light-mc.css",
+    "./theme/dark-mc": "./theme/dark-mc.css",
+    "./theme/light-hc": "./theme/light-hc.css",
+    "./theme/dark-hc": "./theme/dark-hc.css"
   },
   "files": [
     "/src/setThemeFromHexColor.js",

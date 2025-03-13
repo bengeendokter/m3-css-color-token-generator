@@ -1,4 +1,4 @@
-import { setThemeFromHexColor } from "./setThemeFromHexColor";
+import { setMetaThemeColor } from "./setThemeFromHexColor";
 
-setThemeFromHexColor("#ff0000");
+setMetaThemeColor();
 document.documentElement.classList.add('light');

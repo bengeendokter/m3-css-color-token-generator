@@ -2,8 +2,8 @@
 ## Generate theme
 ```TypeScript
 // main.ts
-import {setThemeFromHexColor} from 'm3-css-color-token-generator';
-setThemeFromHexColor('#FF0000');
+import {setMetaThemeColor} from 'm3-css-color-token-generator';
+setMetaThemeColor('#FF0000');
 
 // Add light/dark CSS class to root element
 document.documentElement.classList.add('light');
@@ -13,4 +13,8 @@ document.documentElement.classList.add('light');
 /* styles.css */
 @import "m3-css-color-token-generator/theme/light";
 @import "m3-css-color-token-generator/theme/dark";
+@import "m3-css-color-token-generator/theme/light-mc";
+@import "m3-css-color-token-generator/theme/dark-mc";
+@import "m3-css-color-token-generator/theme/light-hc";
+@import "m3-css-color-token-generator/theme/dark-hc";
 ```

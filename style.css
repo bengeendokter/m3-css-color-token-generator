@@ -1,0 +1,29 @@
+*
+{
+    box-sizing: border-box;
+}
+
+html
+{
+    height: 100%;
+}
+
+body
+{
+    height: 100%;
+    background-color: var(--md-sys-color-surface);
+    margin: 0;
+    padding: 8px;;
+}
+
+h1
+{
+    margin: 0;
+}
+
+.token-preview
+{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}

@@ -13,13 +13,30 @@
   <link rel="stylesheet" type="text/css" href="theme/dark-mc.css">
   <link rel="stylesheet" type="text/css" href="theme/light-hc.css">
   <link rel="stylesheet" type="text/css" href="theme/dark-hc.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body style="background-color: var(--md-sys-color-surface)">
+<body>
   <div id="app"></div>
   <script type="module" src="/src/demo.ts"></script>
   <h1 style="color: var(--md-sys-color-primary)">Hello World</h1>
   <!-- TODO add preview for all system tokens -->
+  <div class="token-preview">
+    <div class="group-primary-tokens">
+      <div class="primary">Primary</div>
+      <div class="on-primary">On Primary</div>
+      <div class="primary-container">Primary Container</div>
+      <div class="on-primary-container">On Primary Container</div>
+    </div>
+    <div class="group-secondary-tokens"></div>
+    <div class="group-tertiary-tokens"></div>
+    <div class="group-error-tokens"></div>
+    <div class="group-surface-tokens"></div>
+    <div class="group-surface-container-tokens"></div>
+    <div class="group-other-tokens"></div>
+    <div class="group-inverse-tokens"></div>
+    <div class="group-shadow-tokens"></div>
+  </div>
 </body>
 
 </html>

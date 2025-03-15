@@ -11,25 +11,15 @@ export function isColorScheme(value: string): value is ColorScheme
   return colorSchemeValues.includes(value);
 };
 
-export type Contrast = 'standard' | 'mc' | 'hc';
+export type Contrast = 'standard' | 'medium-contrast' | 'high-contrast';
 
-type ContrastToFullName<OriginalType extends Contrast> =
-  OriginalType extends 'mc' ? 'medium-contrast' :
-  OriginalType extends 'hc' ? 'high-contrast' :
-  OriginalType;
+type ContrastKey<OriginalType extends Contrast> = OriginalType extends `${infer ContrastLevel}-contrast` ? Uppercase<`${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
+type ContrastValue<Key extends ContrastKey<Contrast>> = Key extends `${infer ContrastLevel}_CONTRAST` ? `${Lowercase<ContrastLevel>}-contrast` : Lowercase<Key>;
 
-type ContrastFullNameToContrast<FullName extends string> =
-  FullName extends 'medium-contrast' ? 'mc' :
-  FullName extends 'high-contrast' ? 'hc' :
-  FullName;
-
-type ContrastKey<OriginalType extends ContrastToFullName<Contrast>> = OriginalType extends `${infer ContrastLevel}-contrast` ? Uppercase<`${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
-type ContrastValue<Key extends ContrastKey<ContrastToFullName<Contrast>>> = Key extends `${infer ContrastLevel}_CONTRAST` ? ContrastFullNameToContrast<`${Lowercase<ContrastLevel>}-contrast`> : Lowercase<Key>;
-
-export const CONTRAST: Readonly<{ [Key in ContrastKey<ContrastToFullName<Contrast>>]: ContrastValue<Key> & Contrast }> = {
+export const CONTRAST: Readonly<{ [Key in ContrastKey<Contrast>]: ContrastValue<Key> & Contrast }> = {
   STANDARD: 'standard',
-  MEDIUM_CONTRAST: 'mc',
-  HIGH_CONTRAST: 'hc',
+  MEDIUM_CONTRAST: 'medium-contrast',
+  HIGH_CONTRAST: 'high-contrast',
 };
 
 export function isContrast(value: string): value is Contrast
@@ -38,8 +28,7 @@ export function isContrast(value: string): value is Contrast
   return contrastValues.includes(value);
 };
 
-
-export type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${ContrastToFullName<Exclude<Contrast, 'standard'>>}`;
+export type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${Exclude<Contrast, 'standard'>}`;
 
 type ThemeClassKey<OriginalType extends ThemeClass> = OriginalType extends `${infer ColorScheme}-${infer ContrastLevel}-contrast` ? Uppercase<`${ColorScheme}_${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
 type ThemeClassValue<Key extends ThemeClassKey<ThemeClass>> = Key extends `${infer ColorScheme}_${infer ContrastLevel}_CONTRAST` ? `${Lowercase<ColorScheme>}-${Lowercase<ContrastLevel>}-contrast` : Lowercase<Key>;

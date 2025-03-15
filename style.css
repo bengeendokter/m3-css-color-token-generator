@@ -3,6 +3,18 @@
     box-sizing: border-box;
 }
 
+:root {
+    accent-color: var(--md-sys-color-primary);
+
+    &:where(.light, .light-medium-contrast, .light-high-contrast) {
+        color-scheme: light;
+    }
+
+    &:where(.dark, .dark-medium-contrast, .dark-high-contrast) {
+        color-scheme: dark;
+    }
+}
+
 html
 {
     height: 100%;

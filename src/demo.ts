@@ -1,4 +1,6 @@
-import { handleDarkThemeButtonPressed, handleHighContrastButtonPressed, handleLightThemeButtonPressed, handleMediumContrastButtonPressed, handleOsColorSchemeButtonPressed, handleOsContrastButtonPressed, handleStandardContrastButtonPressed } from "./theme";
+import { handleDarkThemeButtonPressed, handleHighContrastButtonPressed, handleLightThemeButtonPressed, handleMediumContrastButtonPressed, handleOsColorSchemeButtonPressed, handleOsContrastButtonPressed, handleStandardContrastButtonPressed, setTheme } from "./theme";
+
+setTheme();
 
  // @ts-ignore
 const lightButton: HTMLButtonElement = window["light-button"];

@@ -22,9 +22,10 @@ pnpm add github:bengeendokter/m3-css-color-token-generator#v0.1.1
 ## Use helper functions
 ```TypeScript
 // main.ts
-import {setMetaThemeColor} from 'm3-css-color-token-generator';
-setMetaThemeColor('#FF0000');
+import {setTheme, handleLightThemeButtonPressed} from 'm3-css-color-token-generator';
+setTheme();
 
-// Add light/dark CSS class to root element
-document.documentElement.classList.add('light');
+lightButton.addEventListener("click", () => {
+    handleLightThemeButtonPressed();
+});
 ```

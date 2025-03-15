@@ -287,7 +287,7 @@ export function enableSystemColorSchemePreferenceListener()
       return;
     }
 
-    const newColorScheme = event.matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
+    const newColorScheme: ColorScheme = event.matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
 
     if(newColorScheme === COLOR_SCHEME.DARK)
     {
@@ -320,4 +320,34 @@ export function getContrastPreference(): Contrast
   return storedPreferenceContrast;
 }
 
-// TODO add enableSystemContrastPreferenceListener
+/**
+ * Enables the contrast preference listener.
+ */
+export function enableSystemContrastPreferenceListener()
+{
+  // listen for changes in the color scheme preference
+  window.matchMedia(MEDIA_QUERY.PREFERS_CONTRAST_MORE).addEventListener('change', event =>
+  {
+    const storedPreferenceContrast: string = localStorage.getItem(LOCAL_STORAGE.CONTRAST) ?? OS_PREFERENCE;
+
+    // if the color scheme is explicitly set to light or dark, return
+    if(isContrast(storedPreferenceContrast))
+    {
+      return;
+    }
+
+    const newContrast: Contrast = event.matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.STANDARD;
+
+    if(newContrast === CONTRAST.HIGH_CONTRAST)
+    {
+      setHighContrastTheme();
+      return;
+    }
+
+    if(newContrast === CONTRAST.STANDARD)
+    {
+      setStandardContrastTheme();
+      return;
+    }
+  });
+}

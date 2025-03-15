@@ -1,5 +1,48 @@
+type ColorScheme = 'light' | 'dark';
+
+const COLOR_SCHEME: Readonly<{ [Key in Uppercase<ColorScheme>]: Lowercase<Key> & ColorScheme }> = {
+  LIGHT: 'light',
+  DARK: 'dark',
+};
+
+function isColorScheme(value: string): value is ColorScheme
+{
+  return value in Object.values(COLOR_SCHEME);
+};
+
+type Contrast = 'standard' | 'mc' | 'hc';
+
+const CONTRAST: Readonly<{ [Key in Uppercase<Contrast>]: Lowercase<Key> & Contrast }> = {
+  STANDARD: 'standard',
+  MC: 'mc',
+  HC: 'hc',
+};
+
+function isContrast(value: string): value is Contrast
+{
+  return value in Object.values(CONTRAST);
+};
+
+type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${Exclude<Contrast, 'standard'>}`;
+
+type ThemeClassKey<OriginalType extends ThemeClass> = OriginalType extends `${infer ColorScheme}-${infer Contrast}` ? Uppercase<`${ColorScheme}_${Contrast}`> : Uppercase<OriginalType>;
+type ThemeClassValue<Key extends ThemeClassKey<ThemeClass>> = Key extends `${infer ColorScheme}_${infer Contrast}` ? `${Lowercase<ColorScheme>}-${Lowercase<Contrast>}` : Lowercase<Key>;
+
+const THEME_CLASS: Readonly<{ [Key in ThemeClassKey<ThemeClass>]: ThemeClassValue<Key> & ThemeClass }> = {
+  LIGHT: 'light',
+  LIGHT_MC: 'light-mc',
+  LIGHT_HC: 'light-hc',
+  DARK: 'dark',
+  DARK_MC: 'dark-mc',
+  DARK_HC: 'dark-hc',
+};
+
+function isThemeClass(value: string): value is ThemeClass
+{
+  return value in Object.values(THEME_CLASS);
+};
+
 /**
- * @deprecated default value of --md-sys-color-surface-container does not work, needs to probably be a hex color without css custom properties, research how it was able to work before
  * Sets the theme color meta tag to the given hex color.
  *
  * @param {string} color - The color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
@@ -21,6 +64,7 @@ export function setMetaThemeColor(color?: string)
   {
     const newMetaTag = document.createElement('meta');
     newMetaTag.setAttribute('name', 'theme-color');
+    console.log("color", color);
     newMetaTag.setAttribute('content', color);
     document.head.appendChild(newMetaTag);
     return;
@@ -138,5 +182,10 @@ export function enableSystemColorSchemePreferenceListener()
     }
   });
 }
+
+/**
+ * Sets the contrast to the initial contrast on stored preference or system preference.
+ */
+
 
 // TODO add enableSystemContrastPreferenceListener

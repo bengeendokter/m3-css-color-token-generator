@@ -1,3 +1,3 @@
-import { setTheme } from "./setThemeFromHexColor";
+import { setTheme } from "./theme";
 
 setTheme({colorScheme: "light"});

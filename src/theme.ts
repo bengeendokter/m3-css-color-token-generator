@@ -83,7 +83,7 @@ const LOCAL_STORAGE = {
 /**
  * Sets the theme color meta tag to the given hex color.
  *
- * @param {string} color - The css color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
+ * @param color - The css color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
  */
 export function setMetaThemeColor(color?: string)
 {
@@ -113,10 +113,10 @@ export function setMetaThemeColor(color?: string)
 /**
  * Sets the theme by applying the appropriate CSS classes to the root element.
  *
- * @param {Object} params - The parameters for setting the theme.
- * @param {ColorScheme} [params.colorScheme] - The color scheme to set. If not provided, the preferred color scheme will be used.
- * @param {Contrast} [params.contrast] - The contrast level to set. If not provided, the preferred contrast level will be used.
- * @param {boolean} [params.updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param params - The parameters for setting the theme.
+ * @param [params.colorScheme] - The color scheme to set. If not provided, the preferred color scheme will be used.
+ * @param [params.contrast] - The contrast level to set. If not provided, the preferred contrast level will be used.
+ * @param [params.updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setTheme(params: Partial<{ colorScheme: ColorScheme, contrast: Contrast, updateMetaThemeColor: boolean }> = { updateMetaThemeColor: true })
 {
@@ -145,7 +145,7 @@ export function setTheme(params: Partial<{ colorScheme: ColorScheme, contrast: C
 /**
  * Sets the color scheme to a dark theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setDarkTheme(updateMetaThemeColor = true)
 {
@@ -164,7 +164,7 @@ export function setDarkThemePreference()
 /**
  * Sets the color scheme to a light theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setLightTheme(updateMetaThemeColor = true)
 {
@@ -192,7 +192,7 @@ export function setOsColorSchemePreference()
 /**
  * Sets the theme contrast to a standard.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setStandardContrastTheme(updateMetaThemeColor = true)
 {
@@ -211,7 +211,7 @@ export function setStandardContrastThemePreference()
 /**
  * Sets the theme contrast to a medium.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setMediumContrastTheme(updateMetaThemeColor = true)
 {
@@ -230,7 +230,7 @@ export function setMediumContrastThemePreference()
 /**
  * Sets the theme contrast to high.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setHighContrastTheme(updateMetaThemeColor = true)
 {
@@ -357,7 +357,7 @@ export function enableSystemContrastPreferenceListener()
  * Handles the event when the set to dark theme button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleDarkThemeButtonPressed(updateMetaThemeColor = true)
 {
@@ -369,7 +369,7 @@ export function handleDarkThemeButtonPressed(updateMetaThemeColor = true)
  * Handles the event when the set to light theme button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleLightThemeButtonPressed(updateMetaThemeColor = true)
 {
@@ -381,7 +381,7 @@ export function handleLightThemeButtonPressed(updateMetaThemeColor = true)
  * Handles the event when the set to os color scheme button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleOsColorSchemeButtonPressed(updateMetaThemeColor = true)
 {
@@ -393,7 +393,7 @@ export function handleOsColorSchemeButtonPressed(updateMetaThemeColor = true)
  * Handles the event when the set to standard contrast button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleStandardContrastButtonPressed(updateMetaThemeColor = true)
 {
@@ -405,7 +405,7 @@ export function handleStandardContrastButtonPressed(updateMetaThemeColor = true)
  * Handles the event when the set to medium contrast button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleMediumContrastButtonPressed(updateMetaThemeColor = true)
 {
@@ -417,7 +417,7 @@ export function handleMediumContrastButtonPressed(updateMetaThemeColor = true)
  * Handles the event when the set to high contrast button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleHighContrastButtonPressed(updateMetaThemeColor = true)
 {
@@ -429,7 +429,7 @@ export function handleHighContrastButtonPressed(updateMetaThemeColor = true)
  * Handles the event when the set to os contrast button is pressed.
  * It stores the theme preference and updates the current theme.
  * 
- * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ * @param [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function handleOsContrastButtonPressed(updateMetaThemeColor = true)
 {

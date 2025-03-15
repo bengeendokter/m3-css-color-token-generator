@@ -13,7 +13,7 @@ lightButton.addEventListener("click", () => {
  });
 
 // @ts-ignore
-const osColorScheme: HTMLButtonElement = window["os-color-scheme"];
+const osColorScheme: HTMLButtonElement = window["os-color-scheme-button"];
 osColorScheme.addEventListener("click", () => {
     handleOsColorSchemeButtonPressed();
 });

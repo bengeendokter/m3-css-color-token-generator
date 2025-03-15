@@ -1,7 +1,7 @@
 {
   "name": "m3-css-color-token-generator",
   "private": true,
-  "version": "0.0.10",
+  "version": "0.1.2",
   "description": "Material Design 3 CSS custom properties color token generator.",
   "module": "dist/theme.mjs",
   "types": "dist/theme.d.mts",

@@ -1,16 +1,16 @@
-type ColorScheme = 'light' | 'dark';
+export type ColorScheme = 'light' | 'dark';
 
-const COLOR_SCHEME: Readonly<{ [Key in Uppercase<ColorScheme>]: Lowercase<Key> & ColorScheme }> = {
+export const COLOR_SCHEME: Readonly<{ [Key in Uppercase<ColorScheme>]: Lowercase<Key> & ColorScheme }> = {
   LIGHT: 'light',
   DARK: 'dark',
 };
 
-function isColorScheme(value: string): value is ColorScheme
+export function isColorScheme(value: string): value is ColorScheme
 {
   return value in Object.values(COLOR_SCHEME);
 };
 
-type Contrast = 'standard' | 'mc' | 'hc';
+export type Contrast = 'standard' | 'mc' | 'hc';
 
 type ContrastToFullName<OriginalType extends Contrast> =
   OriginalType extends 'mc' ? 'medium-contrast' :
@@ -25,24 +25,24 @@ type ContrastFullNameToContrast<FullName extends string> =
 type ContrastKey<OriginalType extends ContrastToFullName<Contrast>> = OriginalType extends `${infer ContrastLevel}-contrast` ? Uppercase<`${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
 type ContrastValue<Key extends ContrastKey<ContrastToFullName<Contrast>>> = Key extends `${infer ContrastLevel}_CONTRAST` ? ContrastFullNameToContrast<`${Lowercase<ContrastLevel>}-contrast`> : Lowercase<Key>;
 
-const CONTRAST: Readonly<{ [Key in ContrastKey<ContrastToFullName<Contrast>>]: ContrastValue<Key> & Contrast }> = {
+export const CONTRAST: Readonly<{ [Key in ContrastKey<ContrastToFullName<Contrast>>]: ContrastValue<Key> & Contrast }> = {
   STANDARD: 'standard',
   MEDIUM_CONTRAST: 'mc',
   HIGH_CONTRAST: 'hc',
 };
 
-function isContrast(value: string): value is Contrast
+export function isContrast(value: string): value is Contrast
 {
   return value in Object.values(CONTRAST);
 };
 
 
-type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${ContrastToFullName<Exclude<Contrast, 'standard'>>}`;
+export type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${ContrastToFullName<Exclude<Contrast, 'standard'>>}`;
 
 type ThemeClassKey<OriginalType extends ThemeClass> = OriginalType extends `${infer ColorScheme}-${infer ContrastLevel}-contrast` ? Uppercase<`${ColorScheme}_${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
 type ThemeClassValue<Key extends ThemeClassKey<ThemeClass>> = Key extends `${infer ColorScheme}_${infer ContrastLevel}_CONTRAST` ? `${Lowercase<ColorScheme>}-${Lowercase<ContrastLevel>}-contrast` : Lowercase<Key>;
 
-const THEME_CLASS: Readonly<{ [Key in ThemeClassKey<ThemeClass>]: ThemeClassValue<Key> & ThemeClass }> = {
+export const THEME_CLASS: Readonly<{ [Key in ThemeClassKey<ThemeClass>]: ThemeClassValue<Key> & ThemeClass }> = {
   LIGHT: 'light',
   LIGHT_MEDIUM_CONTRAST: 'light-medium-contrast',
   LIGHT_HIGH_CONTRAST: 'light-high-contrast',
@@ -63,7 +63,7 @@ const darkContrastMap: Readonly<Record<Contrast, ThemeClass>> = {
   [CONTRAST.HIGH_CONTRAST]: THEME_CLASS.DARK_HIGH_CONTRAST,
 };
 
-const colorSchemeMap: Readonly<Record<ColorScheme, Record<Contrast, ThemeClass>>> = {
+export const colorSchemeMap: Readonly<Record<ColorScheme, Record<Contrast, ThemeClass>>> = {
   [COLOR_SCHEME.LIGHT]: lightContrastMap,
   [COLOR_SCHEME.DARK]: darkContrastMap,
 };
@@ -100,6 +100,14 @@ export function setMetaThemeColor(color?: string)
   metaTag.setAttribute('content', color);
 }
 
+/**
+ * Sets the theme by applying the appropriate CSS classes to the root element.
+ *
+ * @param {Object} params - The parameters for setting the theme.
+ * @param {ColorScheme} [params.colorScheme] - The color scheme to set. If not provided, the preferred color scheme will be used.
+ * @param {Contrast} [params.contrast] - The contrast level to set. If not provided, the preferred contrast level will be used.
+ * @param {boolean} [params.updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
 export function setTheme({ colorScheme, contrast, updateMetaThemeColor = true }: Partial<{ colorScheme: ColorScheme, contrast: Contrast, updateMetaThemeColor: boolean }>)
 {
 
@@ -125,6 +133,8 @@ export function setTheme({ colorScheme, contrast, updateMetaThemeColor = true }:
 
 /**
  * Sets the color scheme to a dark theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setDarkTheme(updateMetaThemeColor = true)
 {
@@ -142,6 +152,8 @@ export function setDarkThemePreference()
 
 /**
  * Sets the color scheme to a light theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
 export function setLightTheme(updateMetaThemeColor = true)
 {
@@ -164,6 +176,63 @@ export function setFollowSystemPreference()
 {
   // store the color scheme in local storage
   localStorage.setItem("colorScheme", 'os');
+}
+
+/**
+ * Sets the theme contrast to a standard.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function setStandardContrastTheme(updateMetaThemeColor = true)
+{
+  setTheme({ contrast: CONTRAST.STANDARD, updateMetaThemeColor });
+}
+
+/**
+ * Sets the contrast preference to standard.
+ */
+export function setStandardContrastThemePreference()
+{
+  // store the contrast in local storage
+  localStorage.setItem("contrast", 'standard');
+}
+
+/**
+ * Sets the theme contrast to a medium.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function setMediumContrastTheme(updateMetaThemeColor = true)
+{
+  setTheme({ contrast: CONTRAST.MEDIUM_CONTRAST, updateMetaThemeColor });
+}
+
+/**
+ * Sets the contrast preference to medium.
+ */
+export function setMediumContrastThemePreference()
+{
+  // store the contrast in local storage
+  localStorage.setItem("contrast", 'mc');
+}
+
+/**
+ * Sets the theme contrast to high.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function setHighContrastTheme(updateMetaThemeColor = true)
+{
+  setTheme({ contrast: CONTRAST.HIGH_CONTRAST, updateMetaThemeColor });
+}
+
+/**
+ * Sets the contrast preference to high.
+ */
+export function setHighContrastThemePreference()
+{
+  // store the contrast in local storage
+  localStorage.setItem("contrast", 'hc');
 }
 
 /**

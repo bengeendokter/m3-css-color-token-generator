@@ -80,11 +80,6 @@ const LOCAL_STORAGE = {
   CONTRAST: 'contrast',
 } as const;
 
-// TODO
-// setColorSchemeOS
-// setContrastOS
-// setContrastPreferenceOS
-
 /**
  * Sets the theme color meta tag to the given hex color.
  *
@@ -187,7 +182,7 @@ export function setLightThemePreference()
 /**
  * Sets the color scheme preference to follow system.
  */
-export function setFollowSystemPreference()
+export function setOsColorSchemePreference()
 {
   // store the color scheme in local storage
   localStorage.setItem(LOCAL_STORAGE.COLOR_SCHEME, OS_PREFERENCE);
@@ -248,6 +243,15 @@ export function setHighContrastThemePreference()
 {
   // store the contrast in local storage
   localStorage.setItem(LOCAL_STORAGE.CONTRAST, CONTRAST.HIGH_CONTRAST);
+}
+
+/**
+ * Sets the contrast preference to follow system.
+ */
+export function setOsContrastPreference()
+{
+  // store the contrast in local storage
+  localStorage.setItem(LOCAL_STORAGE.CONTRAST, OS_PREFERENCE);
 }
 
 /**

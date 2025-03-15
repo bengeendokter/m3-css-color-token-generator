@@ -7,7 +7,8 @@ export const COLOR_SCHEME: Readonly<{ [Key in Uppercase<ColorScheme>]: Lowercase
 
 export function isColorScheme(value: string): value is ColorScheme
 {
-  return value in Object.values(COLOR_SCHEME);
+  const colorSchemeValues: string[] = Object.values(COLOR_SCHEME);
+  return colorSchemeValues.includes(value);
 };
 
 export type Contrast = 'standard' | 'mc' | 'hc';
@@ -33,7 +34,8 @@ export const CONTRAST: Readonly<{ [Key in ContrastKey<ContrastToFullName<Contras
 
 export function isContrast(value: string): value is Contrast
 {
-  return value in Object.values(CONTRAST);
+  const contrastValues: string[] = Object.values(CONTRAST);
+  return contrastValues.includes(value);
 };
 
 
@@ -68,6 +70,20 @@ export const colorSchemeMap: Readonly<Record<ColorScheme, Record<Contrast, Theme
   [COLOR_SCHEME.DARK]: darkContrastMap,
 };
 
+const OS_PREFERENCE = 'os' as const;
+const MEDIA_QUERY = {
+  PREFERS_COLOR_SCHEME_DARK: '(prefers-color-scheme: dark)',
+  PREFERS_CONTRAST_MORE: '(prefers-contrast: more)',
+} as const;
+const LOCAL_STORAGE = {
+  COLOR_SCHEME: 'colorScheme',
+  CONTRAST: 'contrast',
+} as const;
+
+// TODO
+// setColorSchemeOS
+// setContrastOS
+// setContrastPreferenceOS
 
 /**
  * Sets the theme color meta tag to the given hex color.
@@ -91,7 +107,6 @@ export function setMetaThemeColor(color?: string)
   {
     const newMetaTag = document.createElement('meta');
     newMetaTag.setAttribute('name', 'theme-color');
-    console.log("color", color);
     newMetaTag.setAttribute('content', color);
     document.head.appendChild(newMetaTag);
     return;
@@ -147,7 +162,7 @@ export function setDarkTheme(updateMetaThemeColor = true)
 export function setDarkThemePreference()
 {
   // store the color scheme in local storage
-  localStorage.setItem("colorScheme", 'dark');
+  localStorage.setItem(LOCAL_STORAGE.COLOR_SCHEME, COLOR_SCHEME.DARK);
 }
 
 /**
@@ -166,7 +181,7 @@ export function setLightTheme(updateMetaThemeColor = true)
 export function setLightThemePreference()
 {
   // store the color scheme in local storage
-  localStorage.setItem("colorScheme", 'light');
+  localStorage.setItem(LOCAL_STORAGE.COLOR_SCHEME, COLOR_SCHEME.LIGHT);
 }
 
 /**
@@ -175,7 +190,7 @@ export function setLightThemePreference()
 export function setFollowSystemPreference()
 {
   // store the color scheme in local storage
-  localStorage.setItem("colorScheme", 'os');
+  localStorage.setItem(LOCAL_STORAGE.COLOR_SCHEME, OS_PREFERENCE);
 }
 
 /**
@@ -194,7 +209,7 @@ export function setStandardContrastTheme(updateMetaThemeColor = true)
 export function setStandardContrastThemePreference()
 {
   // store the contrast in local storage
-  localStorage.setItem("contrast", 'standard');
+  localStorage.setItem(LOCAL_STORAGE.CONTRAST, CONTRAST.STANDARD);
 }
 
 /**
@@ -213,7 +228,7 @@ export function setMediumContrastTheme(updateMetaThemeColor = true)
 export function setMediumContrastThemePreference()
 {
   // store the contrast in local storage
-  localStorage.setItem("contrast", 'mc');
+  localStorage.setItem(LOCAL_STORAGE.CONTRAST, CONTRAST.MEDIUM_CONTRAST);
 }
 
 /**
@@ -232,7 +247,7 @@ export function setHighContrastTheme(updateMetaThemeColor = true)
 export function setHighContrastThemePreference()
 {
   // store the contrast in local storage
-  localStorage.setItem("contrast", 'hc');
+  localStorage.setItem(LOCAL_STORAGE.CONTRAST, CONTRAST.HIGH_CONTRAST);
 }
 
 /**
@@ -240,11 +255,11 @@ export function setHighContrastThemePreference()
  */
 export function getColorSchemePreference(): ColorScheme
 {
-  const storedPreferenceColorScheme: string | null = localStorage.getItem("colorScheme");
+  const storedPreferenceColorScheme: string = localStorage.getItem(LOCAL_STORAGE.COLOR_SCHEME) ?? OS_PREFERENCE;
 
-  const osColorScheme: ColorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
+  const osColorScheme: ColorScheme = window.matchMedia(MEDIA_QUERY.PREFERS_COLOR_SCHEME_DARK).matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
 
-  if(storedPreferenceColorScheme === null || !isColorScheme(storedPreferenceColorScheme))
+  if(!isColorScheme(storedPreferenceColorScheme))
   {
     return osColorScheme;
   }
@@ -258,23 +273,25 @@ export function getColorSchemePreference(): ColorScheme
 export function enableSystemColorSchemePreferenceListener()
 {
   // listen for changes in the color scheme preference
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event =>
+  window.matchMedia(MEDIA_QUERY.PREFERS_COLOR_SCHEME_DARK).addEventListener('change', event =>
   {
+    const storedPreferenceColorScheme: string = localStorage.getItem(LOCAL_STORAGE.COLOR_SCHEME) ?? OS_PREFERENCE;
+
     // if the color scheme is explicitly set to light or dark, return
-    if(["light", "dark"].includes(localStorage.getItem("colorScheme") ?? 'os'))
+    if(isColorScheme(storedPreferenceColorScheme))
     {
       return;
     }
 
-    const newColorScheme = event.matches ? "dark" : "light";
+    const newColorScheme = event.matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
 
-    if(newColorScheme === "dark")
+    if(newColorScheme === COLOR_SCHEME.DARK)
     {
       setDarkTheme();
       return;
     }
 
-    if(newColorScheme === "light")
+    if(newColorScheme === COLOR_SCHEME.LIGHT)
     {
       setLightTheme();
       return;
@@ -287,11 +304,11 @@ export function enableSystemColorSchemePreferenceListener()
  */
 export function getContrastPreference(): Contrast
 {
-  const storedPreferenceContrast: string | null = localStorage.getItem("contrast");
+  const storedPreferenceContrast: string = localStorage.getItem(LOCAL_STORAGE.CONTRAST) ?? OS_PREFERENCE;
 
-  const osContrast: Contrast = window.matchMedia('(prefers-contrast: more)').matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.MEDIUM_CONTRAST;
+  const osContrast: Contrast = window.matchMedia(MEDIA_QUERY.PREFERS_CONTRAST_MORE).matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.MEDIUM_CONTRAST;
 
-  if(storedPreferenceContrast === null || !isContrast(storedPreferenceContrast))
+  if(!isContrast(storedPreferenceContrast))
   {
     return osContrast;
   }

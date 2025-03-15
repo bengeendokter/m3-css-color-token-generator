@@ -118,8 +118,9 @@ export function setMetaThemeColor(color?: string)
  * @param {Contrast} [params.contrast] - The contrast level to set. If not provided, the preferred contrast level will be used.
  * @param {boolean} [params.updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
  */
-export function setTheme({ colorScheme, contrast, updateMetaThemeColor = true }: Partial<{ colorScheme: ColorScheme, contrast: Contrast, updateMetaThemeColor: boolean }>)
+export function setTheme(params: Partial<{ colorScheme: ColorScheme, contrast: Contrast, updateMetaThemeColor: boolean }> = { updateMetaThemeColor: true })
 {
+  const { colorScheme, contrast, updateMetaThemeColor } = params;
 
   // remove all theme classes from the root element
   Object.values(THEME_CLASS).forEach(themeClass =>
@@ -350,4 +351,88 @@ export function enableSystemContrastPreferenceListener()
       return;
     }
   });
+}
+
+/**
+ * Handles the event when the set to dark theme button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleDarkThemeButtonPressed(updateMetaThemeColor = true)
+{
+  setDarkThemePreference();
+  setDarkTheme(updateMetaThemeColor);
+}
+
+/**
+ * Handles the event when the set to light theme button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleLightThemeButtonPressed(updateMetaThemeColor = true)
+{
+  setLightThemePreference();
+  setLightTheme(updateMetaThemeColor);
+}
+
+/**
+ * Handles the event when the set to os color scheme button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleOsColorSchemeButtonPressed(updateMetaThemeColor = true)
+{
+  setOsColorSchemePreference();
+  setTheme({updateMetaThemeColor});
+}
+
+/**
+ * Handles the event when the set to standard contrast button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleStandardContrastButtonPressed(updateMetaThemeColor = true)
+{
+  setStandardContrastThemePreference();
+  setStandardContrastTheme(updateMetaThemeColor);
+}
+
+/**
+ * Handles the event when the set to medium contrast button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleMediumContrastButtonPressed(updateMetaThemeColor = true)
+{
+  setMediumContrastThemePreference();
+  setMediumContrastTheme(updateMetaThemeColor);
+}
+
+/**
+ * Handles the event when the set to high contrast button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleHighContrastButtonPressed(updateMetaThemeColor = true)
+{
+  setHighContrastThemePreference();
+  setHighContrastTheme(updateMetaThemeColor);
+}
+
+/**
+ * Handles the event when the set to os contrast button is pressed.
+ * It stores the theme preference and updates the current theme.
+ * 
+ * @param {boolean} [updateMetaThemeColor=true] - Whether to update the theme color meta tag. Defaults to true.
+ */
+export function handleOsContrastButtonPressed(updateMetaThemeColor = true)
+{
+  setOsContrastPreference();
+  setTheme({updateMetaThemeColor});
 }

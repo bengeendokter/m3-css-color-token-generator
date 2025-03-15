@@ -1,3 +1,3 @@
-import { setTheme } from "./theme";
+import { setDarkTheme } from "./theme";
 
-setTheme({colorScheme: "light"});
+// setDarkTheme();

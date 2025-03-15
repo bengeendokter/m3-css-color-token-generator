@@ -12,10 +12,23 @@ function isColorScheme(value: string): value is ColorScheme
 
 type Contrast = 'standard' | 'mc' | 'hc';
 
-const CONTRAST: Readonly<{ [Key in Uppercase<Contrast>]: Lowercase<Key> & Contrast }> = {
+type ContrastToFullName<OriginalType extends Contrast> =
+  OriginalType extends 'mc' ? 'medium-contrast' :
+  OriginalType extends 'hc' ? 'high-contrast' :
+  OriginalType;
+
+type ContrastFullNameToContrast<FullName extends string> =
+  FullName extends 'medium-contrast' ? 'mc' :
+  FullName extends 'high-contrast' ? 'hc' :
+  FullName;
+
+type ContrastKey<OriginalType extends ContrastToFullName<Contrast>> = OriginalType extends `${infer ContrastLevel}-contrast` ? Uppercase<`${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
+type ContrastValue<Key extends ContrastKey<ContrastToFullName<Contrast>>> = Key extends `${infer ContrastLevel}_CONTRAST` ? ContrastFullNameToContrast<`${Lowercase<ContrastLevel>}-contrast`> : Lowercase<Key>;
+
+const CONTRAST: Readonly<{ [Key in ContrastKey<ContrastToFullName<Contrast>>]: ContrastValue<Key> & Contrast }> = {
   STANDARD: 'standard',
-  MC: 'mc',
-  HC: 'hc',
+  MEDIUM_CONTRAST: 'mc',
+  HIGH_CONTRAST: 'hc',
 };
 
 function isContrast(value: string): value is Contrast
@@ -23,10 +36,8 @@ function isContrast(value: string): value is Contrast
   return value in Object.values(CONTRAST);
 };
 
-type ContrastToThemeClassSlug<OriginalType extends Contrast> = OriginalType extends 'mc' ? 'medium-contrast' :
-  OriginalType extends 'hc' ? 'high-contrast' :
-  never;
-type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${ContrastToThemeClassSlug<Exclude<Contrast, 'standard'>>}`;
+
+type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${ContrastToFullName<Exclude<Contrast, 'standard'>>}`;
 
 type ThemeClassKey<OriginalType extends ThemeClass> = OriginalType extends `${infer ColorScheme}-${infer ContrastLevel}-contrast` ? Uppercase<`${ColorScheme}_${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
 type ThemeClassValue<Key extends ThemeClassKey<ThemeClass>> = Key extends `${infer ColorScheme}_${infer ContrastLevel}_CONTRAST` ? `${Lowercase<ColorScheme>}-${Lowercase<ContrastLevel>}-contrast` : Lowercase<Key>;
@@ -40,15 +51,28 @@ const THEME_CLASS: Readonly<{ [Key in ThemeClassKey<ThemeClass>]: ThemeClassValu
   DARK_HIGH_CONTRAST: 'dark-high-contrast',
 };
 
-function isThemeClass(value: string): value is ThemeClass
-{
-  return value in Object.values(THEME_CLASS);
+const lightContrastMap: Readonly<Record<Contrast, ThemeClass>> = {
+  [CONTRAST.STANDARD]: THEME_CLASS.LIGHT,
+  [CONTRAST.MEDIUM_CONTRAST]: THEME_CLASS.LIGHT_MEDIUM_CONTRAST,
+  [CONTRAST.HIGH_CONTRAST]: THEME_CLASS.LIGHT_HIGH_CONTRAST,
 };
+
+const darkContrastMap: Readonly<Record<Contrast, ThemeClass>> = {
+  [CONTRAST.STANDARD]: THEME_CLASS.DARK,
+  [CONTRAST.MEDIUM_CONTRAST]: THEME_CLASS.DARK_MEDIUM_CONTRAST,
+  [CONTRAST.HIGH_CONTRAST]: THEME_CLASS.DARK_HIGH_CONTRAST,
+};
+
+const colorSchemeMap: Readonly<Record<ColorScheme, Record<Contrast, ThemeClass>>> = {
+  [COLOR_SCHEME.LIGHT]: lightContrastMap,
+  [COLOR_SCHEME.DARK]: darkContrastMap,
+};
+
 
 /**
  * Sets the theme color meta tag to the given hex color.
  *
- * @param {string} color - The color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
+ * @param {string} color - The css color value to set the theme color to. Defaults to the value of the --md-sys-color-surface-container CSS custom property when not provided.
  */
 export function setMetaThemeColor(color?: string)
 {
@@ -76,20 +100,35 @@ export function setMetaThemeColor(color?: string)
   metaTag.setAttribute('content', color);
 }
 
+export function setTheme({ colorScheme, contrast, updateMetaThemeColor = true }: Partial<{ colorScheme: ColorScheme, contrast: Contrast, updateMetaThemeColor: boolean }>)
+{
+
+  // remove all theme classes from the root element
+  Object.values(THEME_CLASS).forEach(themeClass =>
+  {
+    document.documentElement.classList.remove(themeClass);
+  });
+
+  // use parameter values if provided otherwise get preferred values
+  const themeColorScheme: ColorScheme = colorScheme ?? getColorSchemePreference();
+  const themeContrast: Contrast = contrast ?? getContrastPreference();
+  const themeClass: ThemeClass = colorSchemeMap[themeColorScheme][themeContrast];
+
+  // add the theme class to the root
+  document.documentElement.classList.add(themeClass);
+
+  if(updateMetaThemeColor)
+  {
+    setMetaThemeColor();
+  }
+}
+
 /**
- * @deprecated this function doesn't work with contrast themes
  * Sets the color scheme to a dark theme.
  */
-export function setDarkTheme()
+export function setDarkTheme(updateMetaThemeColor = true)
 {
-  // remove "light" class from the root element
-  document.documentElement.classList.remove('light');
-
-  // add "dark" class to the root element
-  document.documentElement.classList.add('dark');
-
-  // update the theme color meta tag
-  setMetaThemeColor();
+  setTheme({ colorScheme: COLOR_SCHEME.DARK, updateMetaThemeColor });
 }
 
 /**
@@ -102,19 +141,11 @@ export function setDarkThemePreference()
 }
 
 /**
- * @deprecated this function doesn't work with contrast themes
  * Sets the color scheme to a light theme.
  */
-export function setLightTheme()
+export function setLightTheme(updateMetaThemeColor = true)
 {
-  // remove "dark" class from the root element
-  document.documentElement.classList.remove('dark');
-
-  // add "light" class to the root element
-  document.documentElement.classList.add('light');
-
-  // update the theme color meta tag
-  setMetaThemeColor();
+  setTheme({ colorScheme: COLOR_SCHEME.LIGHT, updateMetaThemeColor });
 }
 
 /**
@@ -138,22 +169,18 @@ export function setFollowSystemPreference()
 /**
  * Sets the color scheme to the initial theme based on stored preference or system preference.
  */
-export function setInitialTheme()
+export function getColorSchemePreference(): ColorScheme
 {
-  const colorScheme = localStorage.getItem("colorScheme");
-  if(colorScheme === 'dark')
+  const storedPreferenceColorScheme: string | null = localStorage.getItem("colorScheme");
+
+  const osColorScheme: ColorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
+
+  if(storedPreferenceColorScheme === null || !isColorScheme(storedPreferenceColorScheme))
   {
-    setDarkTheme();
-    return;
+    return osColorScheme;
   }
 
-  if(colorScheme === 'light')
-  {
-    setLightTheme();
-    return;
-  }
-
-  window.matchMedia('(prefers-color-scheme: dark)').matches ? setDarkTheme() : setLightTheme();
+  return storedPreferenceColorScheme;
 }
 
 /**
@@ -189,35 +216,18 @@ export function enableSystemColorSchemePreferenceListener()
 /**
  * Sets the contrast to the initial contrast on stored preference or system preference.
  */
-export function setInitialContrast()
+export function getContrastPreference(): Contrast
 {
-  const contrast = localStorage.getItem("contrast");
+  const storedPreferenceContrast: string | null = localStorage.getItem("contrast");
 
+  const osContrast: Contrast = window.matchMedia('(prefers-contrast: more)').matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.MEDIUM_CONTRAST;
 
-  if(contrast === null || !isContrast(contrast))
+  if(storedPreferenceContrast === null || !isContrast(storedPreferenceContrast))
   {
-    return;
+    return osContrast;
   }
 
-  if(contrast === CONTRAST.STANDARD)
-  {
-    setStandardContrast();
-    return;
-  }
-
-  if(contrast === CONTRAST.MC)
-  {
-    setMediumContrast();
-    return;
-  }
-
-  if(contrast === CONTRAST.HC)
-  {
-    setHighContrast();
-    return;
-  }
-
-  window.matchMedia('(prefers-color-scheme: dark)').matches ? setDarkTheme() : setLightTheme();
+  return storedPreferenceContrast;
 }
 
 // TODO add enableSystemContrastPreferenceListener

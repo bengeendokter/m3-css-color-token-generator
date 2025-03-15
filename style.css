@@ -19,9 +19,11 @@ body
     padding: 8px;
 }
 
-h1
+.buttons-container
 {
-    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    padding-block: 8px;
 }
 
 .token-preview

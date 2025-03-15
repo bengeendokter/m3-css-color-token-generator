@@ -23,18 +23,21 @@ function isContrast(value: string): value is Contrast
   return value in Object.values(CONTRAST);
 };
 
-type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${Exclude<Contrast, 'standard'>}`;
+type ContrastToThemeClassSlug<OriginalType extends Contrast> = OriginalType extends 'mc' ? 'medium-contrast' :
+  OriginalType extends 'hc' ? 'high-contrast' :
+  never;
+type ThemeClass = `${ColorScheme}` | `${ColorScheme}-${ContrastToThemeClassSlug<Exclude<Contrast, 'standard'>>}`;
 
-type ThemeClassKey<OriginalType extends ThemeClass> = OriginalType extends `${infer ColorScheme}-${infer Contrast}` ? Uppercase<`${ColorScheme}_${Contrast}`> : Uppercase<OriginalType>;
-type ThemeClassValue<Key extends ThemeClassKey<ThemeClass>> = Key extends `${infer ColorScheme}_${infer Contrast}` ? `${Lowercase<ColorScheme>}-${Lowercase<Contrast>}` : Lowercase<Key>;
+type ThemeClassKey<OriginalType extends ThemeClass> = OriginalType extends `${infer ColorScheme}-${infer ContrastLevel}-contrast` ? Uppercase<`${ColorScheme}_${ContrastLevel}_CONTRAST`> : Uppercase<OriginalType>;
+type ThemeClassValue<Key extends ThemeClassKey<ThemeClass>> = Key extends `${infer ColorScheme}_${infer ContrastLevel}_CONTRAST` ? `${Lowercase<ColorScheme>}-${Lowercase<ContrastLevel>}-contrast` : Lowercase<Key>;
 
 const THEME_CLASS: Readonly<{ [Key in ThemeClassKey<ThemeClass>]: ThemeClassValue<Key> & ThemeClass }> = {
   LIGHT: 'light',
-  LIGHT_MC: 'light-mc',
-  LIGHT_HC: 'light-hc',
+  LIGHT_MEDIUM_CONTRAST: 'light-medium-contrast',
+  LIGHT_HIGH_CONTRAST: 'light-high-contrast',
   DARK: 'dark',
-  DARK_MC: 'dark-mc',
-  DARK_HC: 'dark-hc',
+  DARK_MEDIUM_CONTRAST: 'dark-medium-contrast',
+  DARK_HIGH_CONTRAST: 'dark-high-contrast',
 };
 
 function isThemeClass(value: string): value is ThemeClass
@@ -186,6 +189,35 @@ export function enableSystemColorSchemePreferenceListener()
 /**
  * Sets the contrast to the initial contrast on stored preference or system preference.
  */
+export function setInitialContrast()
+{
+  const contrast = localStorage.getItem("contrast");
 
+
+  if(contrast === null || !isContrast(contrast))
+  {
+    return;
+  }
+
+  if(contrast === CONTRAST.STANDARD)
+  {
+    setStandardContrast();
+    return;
+  }
+
+  if(contrast === CONTRAST.MC)
+  {
+    setMediumContrast();
+    return;
+  }
+
+  if(contrast === CONTRAST.HC)
+  {
+    setHighContrast();
+    return;
+  }
+
+  window.matchMedia('(prefers-color-scheme: dark)').matches ? setDarkTheme() : setLightTheme();
+}
 
 // TODO add enableSystemContrastPreferenceListener

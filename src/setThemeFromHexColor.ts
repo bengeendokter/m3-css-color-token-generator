@@ -310,7 +310,7 @@ export function getContrastPreference(): Contrast
 {
   const storedPreferenceContrast: string = localStorage.getItem(LOCAL_STORAGE.CONTRAST) ?? OS_PREFERENCE;
 
-  const osContrast: Contrast = window.matchMedia(MEDIA_QUERY.PREFERS_CONTRAST_MORE).matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.MEDIUM_CONTRAST;
+  const osContrast: Contrast = window.matchMedia(MEDIA_QUERY.PREFERS_CONTRAST_MORE).matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.STANDARD;
 
   if(!isContrast(storedPreferenceContrast))
   {

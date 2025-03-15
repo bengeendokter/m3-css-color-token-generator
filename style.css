@@ -252,7 +252,7 @@ h1
 .inverse-primary
 {
     background-color: var(--md-sys-color-inverse-primary);
-    color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-inverse-surface);
 }
 
 .group-shadow-tokens
@@ -264,11 +264,11 @@ h1
 .scrim
 {
     background-color: var(--md-sys-color-scrim);
-    color: var(--md-sys-color-on-surface);
+    color: white;
 }
 
 .shadow
 {
     background-color: var(--md-sys-color-shadow);
-    color: var(--md-sys-color-on-surface);
+    color: white;
 }

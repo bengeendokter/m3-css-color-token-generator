@@ -45,3 +45,9 @@ const osContrastButton: HTMLButtonElement = window["os-contrast-button"];
 osContrastButton.addEventListener("click", () => {
     handleOsContrastButtonPressed();
 });
+
+// @ts-ignore
+const colorPicker: HTMLInputElement = window["color-picker"];
+colorPicker.addEventListener("input", () => {
+    document.documentElement.style.setProperty("--theme-base-color", colorPicker.value);
+});

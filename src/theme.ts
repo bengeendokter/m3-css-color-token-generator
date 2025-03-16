@@ -1,6 +1,3 @@
-import exp from "constants";
-import { get } from "http";
-
 export type ColorScheme = 'light' | 'dark';
 
 export const COLOR_SCHEME: Readonly<{ [Key in Uppercase<ColorScheme>]: Lowercase<Key> & ColorScheme }> = {

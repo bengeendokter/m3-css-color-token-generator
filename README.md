@@ -22,8 +22,11 @@ pnpm add github:bengeendokter/m3-css-color-token-generator#v0.1.1
 ## Use helper functions
 ```TypeScript
 // main.ts
-import {setTheme, handleLightThemeButtonPressed} from 'm3-css-color-token-generator';
+import {setTheme, handleLightThemeButtonPressed, enableSystemContrastPreferenceListener, enableSystemColorSchemePreferenceListener} from 'm3-css-color-token-generator';
+
 setTheme();
+enableSystemContrastPreferenceListener();
+enableSystemColorSchemePreferenceListener();
 
 lightButton.addEventListener("click", () => {
     handleLightThemeButtonPressed();

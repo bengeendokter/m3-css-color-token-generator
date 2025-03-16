@@ -1,6 +1,8 @@
-import { handleDarkThemeButtonPressed, handleHighContrastButtonPressed, handleLightThemeButtonPressed, handleMediumContrastButtonPressed, handleOsColorSchemeButtonPressed, handleOsContrastButtonPressed, handleStandardContrastButtonPressed, setTheme } from "./theme";
+import { enableSystemColorSchemePreferenceListener, enableSystemContrastPreferenceListener, handleDarkThemeButtonPressed, handleHighContrastButtonPressed, handleLightThemeButtonPressed, handleMediumContrastButtonPressed, handleOsColorSchemeButtonPressed, handleOsContrastButtonPressed, handleStandardContrastButtonPressed, setTheme } from "./theme";
 
 setTheme();
+enableSystemContrastPreferenceListener();
+enableSystemColorSchemePreferenceListener();
 
  // @ts-ignore
 const lightButton: HTMLButtonElement = window["light-button"];

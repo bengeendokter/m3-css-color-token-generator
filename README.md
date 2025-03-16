@@ -1,4 +1,7 @@
 # Material Design 3 CSS custom properties color token generator
+## New repo
+The code has been moved to https://github.com/bengeendokter/m3-color-css 
+Verions 1.2 and prior can be found in this repo.
 ## Install
 ### Install latest version
 ```bash

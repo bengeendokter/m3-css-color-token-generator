@@ -1,3 +1,6 @@
+import exp from "constants";
+import { get } from "http";
+
 export type ColorScheme = 'light' | 'dark';
 
 export const COLOR_SCHEME: Readonly<{ [Key in Uppercase<ColorScheme>]: Lowercase<Key> & ColorScheme }> = {
@@ -249,11 +252,11 @@ export function setOsContrastPreference()
  */
 export function getColorSchemePreference(): ColorScheme
 {
-  const storedPreferenceColorScheme: string = localStorage.getItem(LOCAL_STORAGE.COLOR_SCHEME) ?? OS_PREFERENCE;
+  const storedPreferenceColorScheme: ColorScheme | typeof OS_PREFERENCE = getLocalStorageColorScheme();
 
   const osColorScheme: ColorScheme = window.matchMedia(MEDIA_QUERY.PREFERS_COLOR_SCHEME_DARK).matches ? COLOR_SCHEME.DARK : COLOR_SCHEME.LIGHT;
 
-  if(!isColorScheme(storedPreferenceColorScheme))
+  if(storedPreferenceColorScheme === OS_PREFERENCE)
   {
     return osColorScheme;
   }
@@ -298,11 +301,11 @@ export function enableSystemColorSchemePreferenceListener()
  */
 export function getContrastPreference(): Contrast
 {
-  const storedPreferenceContrast: string = localStorage.getItem(LOCAL_STORAGE.CONTRAST) ?? OS_PREFERENCE;
+  const storedPreferenceContrast: Contrast | typeof OS_PREFERENCE = getLocalStorageContrast();
 
   const osContrast: Contrast = window.matchMedia(MEDIA_QUERY.PREFERS_CONTRAST_MORE).matches ? CONTRAST.HIGH_CONTRAST : CONTRAST.STANDARD;
 
-  if(!isContrast(storedPreferenceContrast))
+  if(storedPreferenceContrast === OS_PREFERENCE)
   {
     return osContrast;
   }
@@ -424,4 +427,34 @@ export function handleOsContrastButtonPressed(updateMetaThemeColor = true)
 {
   setOsContrastPreference();
   setTheme({updateMetaThemeColor});
+}
+
+/**
+ * @returns The contrast from local storage. If not found, returns 'os'.
+ */
+export function getLocalStorageColorScheme(): ColorScheme | typeof OS_PREFERENCE
+{
+  const storedPreferenceColorScheme: string = localStorage.getItem(LOCAL_STORAGE.COLOR_SCHEME) ?? OS_PREFERENCE;
+
+  if(!isColorScheme(storedPreferenceColorScheme))
+  {
+    return OS_PREFERENCE;
+  }
+
+  return storedPreferenceColorScheme;
+}
+
+/**
+ * @returns The contrast from local storage. If not found, returns 'os'.
+ */
+export function getLocalStorageContrast(): Contrast | typeof OS_PREFERENCE
+{
+  const storedPreferenceContrast: string = localStorage.getItem(LOCAL_STORAGE.CONTRAST) ?? OS_PREFERENCE;
+
+  if(!isContrast(storedPreferenceContrast))
+  {
+    return OS_PREFERENCE;
+  }
+
+  return storedPreferenceContrast;
 }
